@@ -15,6 +15,7 @@ import com.acmerobotics.roadrunner.ftc.OverflowEncoder;
 import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -23,6 +24,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.messages.TwoDeadWheelInputsMessage;
+import org.firstinspires.ftc.teamcode.utility.RobotConstants;
 
 @Config
 public final class TwoDeadWheelLocalizer implements Localizer {
@@ -49,11 +51,12 @@ public final class TwoDeadWheelLocalizer implements Localizer {
         // TODO: make sure your config has **motors** with these names (or change them)
         //   the encoders should be plugged into the slot matching the named motor
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
-        par = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "par")));
-        perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "perp")));
+        par = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, RobotConstants.HardwareConfiguration.kLabelDrivetrainMotorLeftFront)));
+        perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, RobotConstants.HardwareConfiguration.kLabelDrivetrainMotorRightFront)));
 
         // TODO: reverse encoder directions if needed
-        //   par.setDirection(DcMotorSimple.Direction.REVERSE);
+        par.setDirection(DcMotorEx.Direction.FORWARD);
+        par.setDirection(DcMotorEx.Direction.FORWARD);
 
         this.imu = imu;
 
@@ -63,6 +66,10 @@ public final class TwoDeadWheelLocalizer implements Localizer {
 
         pose = initialPose;
     }
+
+    // Action(s)
+    @Override
+    public void resetRobotHeading() {}
 
     @Override
     public void setPose(Pose2d pose) {
