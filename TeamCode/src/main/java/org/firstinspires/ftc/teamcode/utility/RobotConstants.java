@@ -369,7 +369,7 @@ public class RobotConstants {
 
         public static final class Setpoint {
 
-            public static final double kAutoLoadingLaunchZone = 0.75;
+            public static final double kAutoLoadingLaunchZone = 0.80;
             public static final double kAutoDepotLaunchZone = 0.40;
 
         }

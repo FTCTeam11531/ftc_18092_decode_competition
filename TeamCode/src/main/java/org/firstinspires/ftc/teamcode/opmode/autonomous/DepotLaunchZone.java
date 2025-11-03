@@ -7,16 +7,13 @@ import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Drawing;
-import org.firstinspires.ftc.teamcode.Localizer;
 import org.firstinspires.ftc.teamcode.system.drivetrain.DrivetrainMecanum;
 import org.firstinspires.ftc.teamcode.system.indexer.Indexer;
 import org.firstinspires.ftc.teamcode.system.intake.Intake;
@@ -28,9 +25,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.Locale;
 
-@Disabled
-@Autonomous(name="Loading Launch Zone", group="_main", preselectTeleOp="DriverControl")
-public class LoadingLaunchZone extends LinearOpMode {
+@Autonomous(name="Depot Launch Zone", group="_main", preselectTeleOp="DriverControl")
+public class DepotLaunchZone extends LinearOpMode {
 
     // System - Drivetrain
     DrivetrainMecanum drivetrain;
@@ -233,12 +229,17 @@ public class LoadingLaunchZone extends LinearOpMode {
             TrajectoryActionBuilder waitPeriodSecondsSix = drivetrain.actionBuilder(initialPose)
                     .waitSeconds(6.0);
 
-            // Path - Move to Shoot - Position One
-            TrajectoryActionBuilder pathStart = drivetrain.actionBuilder(initialPose)
+            // Path - Initial Turn
+            TrajectoryActionBuilder pathInitialTurn = drivetrain.actionBuilder(initialPose)
+                    .turnTo(Math.toRadians(RobotConstants.UnitConversion.addTwoDegreeValuesTogether(-180, headingAllianceAdj)));
+
+
+            // Path - Move out of Zone
+            TrajectoryActionBuilder pathLeaveZone = pathInitialTurn.fresh()
                     .splineToLinearHeading(new Pose2d(
                             25 * pathAllianceAdjX
                             ,20 * pathAllianceAdjY
-                            , Math.toRadians(RobotConstants.UnitConversion.addTwoDegreeValuesTogether(180, headingAllianceAdj))), Math.PI/2)
+                            , Math.toRadians(RobotConstants.UnitConversion.addTwoDegreeValuesTogether(-180, headingAllianceAdj))), Math.PI/2)
                     .waitSeconds(0.5);
 
             // Log start of action(s)
@@ -252,6 +253,8 @@ public class LoadingLaunchZone extends LinearOpMode {
 
                             // Initial
                             waitPeriodSecondsHalf.build()
+
+                            , pathInitialTurn.build()
 
                             // Shoot loaded Artifacts
                             , new ParallelAction(
@@ -320,8 +323,7 @@ public class LoadingLaunchZone extends LinearOpMode {
 //                            0)
 
                             // Move away from launch zone
-                            , pathStart.build()
-
+                            , pathLeaveZone.build()
 
                     )
 
