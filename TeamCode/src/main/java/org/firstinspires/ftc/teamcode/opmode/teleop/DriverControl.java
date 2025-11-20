@@ -248,7 +248,7 @@ public class DriverControl extends LinearOpMode {
         telemetry.clearAll();
 
         // About to play battle cry
-//        sound.playSoundFileByName(RobotConstants.Sound.kSoundFileLightSaberLong);
+        sound.playSoundFileByName(RobotConstants.Sound.kSoundFileWookie);
 
         // Loop while opMode is active
         while (opModeIsActive() && !isStopRequested()) {
@@ -396,6 +396,10 @@ public class DriverControl extends LinearOpMode {
             if(currDriver.left_trigger >= 0.20) {
                 intake.activateIntake(RobotConstants.HardwareConfiguration.kLabelIntakeServoLeft, intakeOutputLeft);
                 intake.activateIntake(RobotConstants.HardwareConfiguration.kLabelIntakeServoRight, intakeOutputRight);
+            }
+            else if(currDriver.right_trigger >= 0.20) {
+                intake.activateIntake(RobotConstants.HardwareConfiguration.kLabelIntakeServoLeft, -intakeOutputLeft);
+                intake.activateIntake(RobotConstants.HardwareConfiguration.kLabelIntakeServoRight, -intakeOutputRight);
             }
             else {
                 intake.deactivateIntake(RobotConstants.HardwareConfiguration.kLabelIntakeServoLeft);
@@ -572,19 +576,19 @@ public class DriverControl extends LinearOpMode {
             telemetry.addData("-","-- Vision");
             telemetry.addData("-","--------------------------------------");
 //            telemetry.addData("alliance", String.format(Locale.US,"{color: %s, red: %d, blue: %d, green: %d}", sysVision.getAllianceColor(), sysVision.getAllianceColorValueRed(), sysVision.getAllianceColorValueBlue(), sysVision.getAllianceColorValueGreen()));
-            telemetry.addData("Camera Block Count", vision.getListAICameraObject().length);
-            if (targetAIObject != null) {
-                telemetry.addData("-", "------------------------------");
-                telemetry.addData("-", "-- Target Object");
-                telemetry.addData("-", "------------------------------");
-                telemetry.addData("Target ID", targetAIObject.id);
-                telemetry.addData("Target x:", targetAIObject.x);
-                telemetry.addData("Target y:", targetAIObject.y);
-                telemetry.addData("Target width:", targetAIObject.width);
-                telemetry.addData("Target height:", targetAIObject.height);
-                telemetry.addData("Target top:", targetAIObject.top);
-                telemetry.addData("Target left:", targetAIObject.left);
-            }
+//            telemetry.addData("Camera Block Count", vision.getListAICameraObject().length);
+//            if (targetAIObject != null) {
+//                telemetry.addData("-", "------------------------------");
+//                telemetry.addData("-", "-- Target Object");
+//                telemetry.addData("-", "------------------------------");
+//                telemetry.addData("Target ID", targetAIObject.id);
+//                telemetry.addData("Target x:", targetAIObject.x);
+//                telemetry.addData("Target y:", targetAIObject.y);
+//                telemetry.addData("Target width:", targetAIObject.width);
+//                telemetry.addData("Target height:", targetAIObject.height);
+//                telemetry.addData("Target top:", targetAIObject.top);
+//                telemetry.addData("Target left:", targetAIObject.left);
+//            }
 
             telemetry.addData("-", "------------------------------");
             telemetry.addData("-", "-- Detected April Tag ID    --");

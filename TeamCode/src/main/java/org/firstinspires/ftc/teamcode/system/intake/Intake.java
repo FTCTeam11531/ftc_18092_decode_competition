@@ -71,7 +71,7 @@ public class Intake {
 
         // Set Non-common motor configuration(s)
         intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        intakeRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        intakeRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         intakeLeft.setPower(0);
         intakeRight.setPower(0);

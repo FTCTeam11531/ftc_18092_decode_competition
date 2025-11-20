@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.teamcode.utility.RobotConstants;
@@ -148,12 +149,50 @@ public class Shooter {
 
     }
 
+    public void activateShooterVelocity(String hardwareLabel, double setpoint) {
+
+        switch (hardwareLabel) {
+            case RobotConstants.HardwareConfiguration.kLabelShooterMotorLeft:
+                shooterLeft.setVelocity(setpoint);
+                break;
+
+            case RobotConstants.HardwareConfiguration.kLabelShooterMotorRight:
+                shooterRight.setVelocity(setpoint);
+                break;
+
+        }
+
+    }
+
     public void deactivateShooter(String hardwareLabel) {
         double setpoint = 0;
 
         activateShooter(hardwareLabel, setpoint);
     }
 
+    public boolean checkShooterVelocityLevel(String hardwareLabel, double setpoint) {
+
+        boolean atSetpoint = false;
+
+        switch (hardwareLabel) {
+            case RobotConstants.HardwareConfiguration.kLabelShooterMotorLeft:
+                if((shooterLeft.getVelocity() >= setpoint - RobotConstants.Shooter.Setpoint.Velocity.kOffset) &&
+                        (shooterLeft.getVelocity() <= setpoint + RobotConstants.Shooter.Setpoint.Velocity.kOffset)) {
+                    atSetpoint = true;
+                }
+                break;
+
+            case RobotConstants.HardwareConfiguration.kLabelShooterMotorRight:
+                if((shooterRight.getVelocity() >= setpoint - RobotConstants.Shooter.Setpoint.Velocity.kOffset) &&
+                        (shooterRight.getVelocity() <= setpoint + RobotConstants.Shooter.Setpoint.Velocity.kOffset)) {
+                    atSetpoint = true;
+                }
+                break;
+
+        }
+
+        return atSetpoint;
+    }
 
     // ----------------------------------------------
     // Action Methods - Road Runner
@@ -224,6 +263,25 @@ public class Shooter {
         return outputVelocity;
     }
 
+    public PIDFCoefficients getShooterPIDFCoefficient(String motorLabel) {
+        PIDFCoefficients motorPIDFCoefficient;
+
+        switch (motorLabel) {
+            case RobotConstants.HardwareConfiguration.kLabelShooterMotorLeft:
+                motorPIDFCoefficient = shooterLeft.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+                break;
+
+            case RobotConstants.HardwareConfiguration.kLabelShooterMotorRight:
+                motorPIDFCoefficient = shooterRight.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+                break;
+
+            default:
+                motorPIDFCoefficient = new PIDFCoefficients();
+        }
+
+        return motorPIDFCoefficient;
+    }
+
     public ShootingMode getShootingModeLeft() {
         return shootingModeLeft;
     }
@@ -248,6 +306,13 @@ public class Shooter {
         }
     }
 
+    public void setMotorPIDFCoefficients(DcMotorEx.RunMode runMode, PIDFCoefficients pidfCoefficients) {
+        setMotorRunMode(runMode);
+
+        for (DcMotorEx itemMotor : listMotorShooter) {
+            itemMotor.setPIDFCoefficients(runMode, pidfCoefficients);
+        }
+    }
 
     public void setShootingModeLeft(ShootingMode newShootingMode) {
         shootingModeLeft = newShootingMode;
