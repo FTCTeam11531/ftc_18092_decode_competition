@@ -46,7 +46,7 @@ public class DriverControl extends LinearOpMode {
     Sound sound = new Sound(this);
 
     // System - Lighting
-//    Lighting lighting = new Lighting(this);
+    Lighting lighting = new Lighting(this);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -70,7 +70,7 @@ public class DriverControl extends LinearOpMode {
         HuskyLens.Block[] listTargetAIObjects = null;
         HuskyLens.Block targetAIObject = null;
 
-        String detectedAprilTagIds;
+        String detectedAprilTagIds, labelAlliance = "unknown";
 
         int patternIdObelisk, pathAllianceAdj, headingAllianceAdj;
 
@@ -104,21 +104,21 @@ public class DriverControl extends LinearOpMode {
         sound.init();
 
         // System - Lighting
-//        lighting.init();
+        lighting.init();
 
         // -- Configuration - Get Initial Pose for Drivetrain
-        if(vision.getDetectedAllianceColor().equals("blue")) {
-            pathAllianceAdj = 1;
-            headingAllianceAdj = 0;
-//            initialPose = RobotConstants.Drivetrain.Autonomous.Pose.kInitialPoseHangmanBlue;
-//            sysLighting.setLightPattern(RobotConstants.Lighting.Pattern.Default.kAutonomousAllianceBlueHangman);
-        }
-        else {
-            pathAllianceAdj = -1;
-            headingAllianceAdj = 180;
-//            initialPose = RobotConstants.Drivetrain.Autonomous.Pose.kInitialPoseHangmanRed;
-//            sysLighting.setLightPattern(RobotConstants.Lighting.Pattern.Default.kAutonomousAllianceRedHangman);
-        }
+//        if(vision.getDetectedAllianceColor(labelAlliance).equals("blue")) {
+//            pathAllianceAdj = 1;
+//            headingAllianceAdj = 0;
+////            initialPose = RobotConstants.Drivetrain.Autonomous.Pose.kInitialPoseHangmanBlue;
+////            sysLighting.setLightPattern(RobotConstants.Lighting.Pattern.Default.kAutonomousAllianceBlueHangman);
+//        }
+//        else {
+//            pathAllianceAdj = -1;
+//            headingAllianceAdj = 180;
+////            initialPose = RobotConstants.Drivetrain.Autonomous.Pose.kInitialPoseHangmanRed;
+////            sysLighting.setLightPattern(RobotConstants.Lighting.Pattern.Default.kAutonomousAllianceRedHangman);
+//        }
 
         // Clear all telemetry
         telemetry.clearAll();
@@ -162,7 +162,7 @@ public class DriverControl extends LinearOpMode {
             telemetry.addData("-","--------------------------------------");
             telemetry.addData("drivetrain", String.format(Locale.US,"{mode: %s, speed: %s}", drivetrain.getDrivetrainMode().getLabel(), drivetrain.getDrivetrainOutputPower().getLabel()));
             telemetry.addData("-","--------------------------------------");
-//            telemetry.addData("light mode", lighting.getLightPatternCurrent().toString());
+            telemetry.addData("light mode", lighting.getLightPatternCurrent().toString());
 
             // Show joystick information
             telemetry.addData("-","--------------------------------------");
@@ -187,7 +187,7 @@ public class DriverControl extends LinearOpMode {
             telemetry.addData("-", "------------------------------");
             telemetry.addData("-", "-- Vision");
             telemetry.addData("-", "------------------------------");
-            telemetry.addData("Alliance", vision.getDetectedAllianceColor());
+            telemetry.addData("Alliance", vision.getDetectedAllianceColor(labelAlliance));
             telemetry.addData("-", "------------------------------");
             telemetry.addData("-", "-- Detected April Tag ID    --");
             telemetry.addData("-", "------------------------------");
@@ -231,10 +231,10 @@ public class DriverControl extends LinearOpMode {
             idle();
 
             // FTC Dashboard
-            TelemetryPacket packet = new TelemetryPacket();
-            packet.fieldOverlay().setStroke("#3F51B5");
-            Drawing.drawRobot(packet.fieldOverlay(), robotPose);
-            FtcDashboard.getInstance().sendTelemetryPacket(packet);
+//            TelemetryPacket packet = new TelemetryPacket();
+//            packet.fieldOverlay().setStroke("#3F51B5");
+//            Drawing.drawRobot(packet.fieldOverlay(), robotPose);
+//            FtcDashboard.getInstance().sendTelemetryPacket(packet);
         }
 
         // Wait for Start state (from driver station) - (disable if using an init loop)
@@ -379,19 +379,19 @@ public class DriverControl extends LinearOpMode {
             // Intake
             // Driver Control
             // ------------------------------------
-            if(currDriver.dpad_up && !prevDriver.dpad_up) {
-                if(intakeOutputLeft < 1.0) {
-                    intakeOutputLeft = intakeOutputLeft + 0.05;
-                    intakeOutputRight = intakeOutputLeft;
-                }
-            }
-
-            if(currDriver.dpad_down && !prevDriver.dpad_down) {
-                if(intakeOutputLeft > 0.0) {
-                    intakeOutputLeft = intakeOutputLeft - 0.05;
-                    intakeOutputRight = intakeOutputLeft;
-                }
-            }
+//            if(currDriver.dpad_up && !prevDriver.dpad_up) {
+//                if(intakeOutputLeft < 1.0) {
+//                    intakeOutputLeft = intakeOutputLeft + 0.05;
+//                    intakeOutputRight = intakeOutputLeft;
+//                }
+//            }
+//
+//            if(currDriver.dpad_down && !prevDriver.dpad_down) {
+//                if(intakeOutputLeft > 0.0) {
+//                    intakeOutputLeft = intakeOutputLeft - 0.05;
+//                    intakeOutputRight = intakeOutputLeft;
+//                }
+//            }
 
             if(currDriver.left_trigger >= 0.20) {
                 intake.activateIntake(RobotConstants.HardwareConfiguration.kLabelIntakeServoLeft, intakeOutputLeft);
@@ -469,17 +469,17 @@ public class DriverControl extends LinearOpMode {
             // ------------------------------------------------------------
             // Lighting
             // ------------------------------------------------------------
-//            if(vision.checkTargetBearing()) {
-//                lighting.setLightPattern(RobotConstants.Lighting.Pattern.kOnTarget);
-//            }
-//            else if(opModeRunTime.time() >= 90.00 && opModeRunTime.time() <= 120.00) {
-//
-//                lighting.setLightPattern(RobotConstants.Lighting.Pattern.kEndgame);
-//            }
-//            else {
-//
-//                lighting.setLightPattern(RobotConstants.Lighting.Pattern.kTeleop);
-//            }
+            if(vision.checkTargetBearing()) {
+                lighting.setLightPattern(RobotConstants.Lighting.Pattern.kOnTarget);
+            }
+            else if(opModeRunTime.time() >= 90.00 && opModeRunTime.time() <= 120.00) {
+
+                lighting.setLightPattern(RobotConstants.Lighting.Pattern.kEndgame);
+            }
+            else {
+
+                lighting.setLightPattern(RobotConstants.Lighting.Pattern.kTeleop);
+            }
 
             // ------------------------------------
             // Override
@@ -509,7 +509,7 @@ public class DriverControl extends LinearOpMode {
                     , robotPose.position.y
                     , Math.toDegrees(robotPose.heading.toDouble())));
             telemetry.addData("-","--------------------------------------");
-//            telemetry.addData("light mode", sysLighting.getLightPatternCurrent().toString());
+            telemetry.addData("light mode", lighting.getLightPatternCurrent().toString());
             telemetry.addData("-","--------------------------------------");
 
             // Show joystick information
@@ -554,9 +554,9 @@ public class DriverControl extends LinearOpMode {
                             , intake.getIntakePower(RobotConstants.HardwareConfiguration.kLabelIntakeServoRight)));
 
             // Show Arm and Intake Telemetry
-            telemetry.addData("-","--------------------------------------");
-            telemetry.addData("-","-- Arm / Intake");
-            telemetry.addData("-","--------------------------------------");
+//            telemetry.addData("-","--------------------------------------");
+//            telemetry.addData("-","-- Arm / Intake");
+//            telemetry.addData("-","--------------------------------------");
 //            telemetry.addData("arm position - motor", String.format(Locale.US,"{pivot: %d, extend left: %d, extend right: %d, shuttle: %d}", sysArm.getArmMotorCurrentPosition(RobotConstants.HardwareConfiguration.kLabelArmMotorPivot), sysArm.getArmMotorCurrentPosition(RobotConstants.HardwareConfiguration.kLabelArmMotorExtendLeft), sysArm.getArmMotorCurrentPosition(RobotConstants.HardwareConfiguration.kLabelArmMotorExtendRight), sysArm.getArmMotorCurrentPosition(RobotConstants.HardwareConfiguration.kLabelArmMotorShuttle)));
 //            telemetry.addData("arm position - tolerance", String.format(Locale.US,"{pivot: %d, extend left: %d, extend right: %d}", sysArm.getArmMotorPositionTolerance(RobotConstants.HardwareConfiguration.kLabelArmMotorPivot), sysArm.getArmMotorPositionTolerance(RobotConstants.HardwareConfiguration.kLabelArmMotorExtendLeft), sysArm.getArmMotorPositionTolerance(RobotConstants.HardwareConfiguration.kLabelArmMotorExtendRight)));
 //            telemetry.addData("arm position - extension", String.format(Locale.US,"{left: %.3f, right: %.3f, max: %.3f}", sysArm.getArmExtensionSensorCurrentPosition(RobotConstants.HardwareConfiguration.kLabelArmSensorExtendLimitLeft), sysArm.getArmExtensionSensorCurrentPosition(RobotConstants.HardwareConfiguration.kLabelArmSensorExtendLimitRight), sysArm.getArmExtensionPosition()));
@@ -572,9 +572,9 @@ public class DriverControl extends LinearOpMode {
 //            telemetry.addData("Extend Direction", sysArm.getArmTravelDirectionMode(RobotConstants.HardwareConfiguration.kLabelArmMotorExtendLeft));
 
             // Show Vision
-            telemetry.addData("-","--------------------------------------");
-            telemetry.addData("-","-- Vision");
-            telemetry.addData("-","--------------------------------------");
+//            telemetry.addData("-","--------------------------------------");
+//            telemetry.addData("-","-- Vision");
+//            telemetry.addData("-","--------------------------------------");
 //            telemetry.addData("alliance", String.format(Locale.US,"{color: %s, red: %d, blue: %d, green: %d}", sysVision.getAllianceColor(), sysVision.getAllianceColorValueRed(), sysVision.getAllianceColorValueBlue(), sysVision.getAllianceColorValueGreen()));
 //            telemetry.addData("Camera Block Count", vision.getListAICameraObject().length);
 //            if (targetAIObject != null) {
@@ -590,12 +590,12 @@ public class DriverControl extends LinearOpMode {
 //                telemetry.addData("Target left:", targetAIObject.left);
 //            }
 
-            telemetry.addData("-", "------------------------------");
-            telemetry.addData("-", "-- Detected April Tag ID    --");
-            telemetry.addData("-", "------------------------------");
-            telemetry.addData("Target ID", detectedAprilTagIds);
-
-            vision.telemetryAprilTag();
+//            telemetry.addData("-", "------------------------------");
+//            telemetry.addData("-", "-- Detected April Tag ID    --");
+//            telemetry.addData("-", "------------------------------");
+//            telemetry.addData("Target ID", detectedAprilTagIds);
+//
+//            vision.telemetryAprilTag();
 
             // ------------------------------------------------------------
             // - send telemetry to driver hub
@@ -603,10 +603,10 @@ public class DriverControl extends LinearOpMode {
             telemetry.update();
 
             // FTC Dashboard
-            TelemetryPacket packet = new TelemetryPacket();
-            packet.fieldOverlay().setStroke("#3F51B5");
-            Drawing.drawRobot(packet.fieldOverlay(), robotPose);
-            FtcDashboard.getInstance().sendTelemetryPacket(packet);
+//            TelemetryPacket packet = new TelemetryPacket();
+//            packet.fieldOverlay().setStroke("#3F51B5");
+//            Drawing.drawRobot(packet.fieldOverlay(), robotPose);
+//            FtcDashboard.getInstance().sendTelemetryPacket(packet);
         }
 
 

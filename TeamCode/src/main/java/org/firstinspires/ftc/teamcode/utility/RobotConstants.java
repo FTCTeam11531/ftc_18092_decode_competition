@@ -291,18 +291,18 @@ public class RobotConstants {
             // Use ForwardPushTest
             // Calculate inches traveled divided by encoder ticks
             // 71 inches traveled in 36118 encoder ticks
-            public static final double kDriveInchPerTick = 0.0019657788360374; // start with 1
+            public static final double kDriveInchPerTick = 0.0019805602006689; // start with 1
 
             // Use LateralRampLogger
             public static final double kDriveLateralInchPerTick = 0.0015656919615167871; //0.0015410113296490046;
 
             // Use AngularRampLogger
-            public static final double kTrackWidthTick = 8071.8625512372755; //7746.47525654597;  // 7869.6344302389850; // start with zero
+            public static final double kTrackWidthTick = 6794.354682039215; //7746.47525654597;  // 7869.6344302389850; // start with zero
 
             // Use ForwardRampLogger
             //
-            public static final double kFeedForwardTicksVValue = 0.0005233626439114997; //0.0005356723804858107; // start with zero
-            public static final double kFeedForwardTicksSValue = 0.7284380480680506; //0.7144413226928252; // start with zero
+            public static final double kFeedForwardTicksVValue = 0.00037594715898268434; //0.0005356723804858107; // start with zero
+            public static final double kFeedForwardTicksSValue = 0.7181676319457013; //0.7144413226928252; // start with zero
             public static final double kFeedForwardTicksAValue = 0.0001451; //0.0011111; // start with zero
 
             // path profile parameters (in inches)
@@ -382,7 +382,7 @@ public class RobotConstants {
             }
 
             public static final double kAutoLoadingLaunchZone = 0.80;
-            public static final double kAutoDepotLaunchZone = 0.40;
+            public static final double kAutoDepotLaunchZone = 0.80;
 
         }
 
@@ -509,7 +509,7 @@ public class RobotConstants {
 
         public static final class Pattern {
 
-            public static final RevBlinkinLedDriver.BlinkinPattern kDefault = RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_BLUE;
+            public static final RevBlinkinLedDriver.BlinkinPattern kDefault = RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_GRAY;
             public static final RevBlinkinLedDriver.BlinkinPattern kTeleop = kDefault;
             public static final RevBlinkinLedDriver.BlinkinPattern kAutonomous = kDefault;
 
@@ -524,6 +524,8 @@ public class RobotConstants {
             public static final RevBlinkinLedDriver.BlinkinPattern kEnd = RevBlinkinLedDriver.BlinkinPattern.BREATH_RED;
             public static final RevBlinkinLedDriver.BlinkinPattern kReadyToShoot = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_WITH_GLITTER;
             public static final RevBlinkinLedDriver.BlinkinPattern kOnTarget = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_FOREST_PALETTE;
+            public static final RevBlinkinLedDriver.BlinkinPattern kOnTargetRed = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE;
+            public static final RevBlinkinLedDriver.BlinkinPattern kOnTargetBlue = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE;
 
         }
 
